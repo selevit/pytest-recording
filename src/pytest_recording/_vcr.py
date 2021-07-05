@@ -46,6 +46,7 @@ class CombinedPersister(FilesystemPersister):
         requests, responses = list(requests), list(responses)
         if not requests or not responses:
             raise ValueError("No cassettes found.")
+        print('DEBUG: Loaded cassettes', requests)
         return requests, responses
 
 
@@ -83,6 +84,7 @@ def use_cassette(
 
     extra_paths = [extra_path_transformer(path) for marker in markers for path in marker.args]
     persister = CombinedPersister(extra_paths)
+    print('DEBUG: Cassette extra paths', extra_paths)
     vcr.register_persister(persister)
     pytestconfig.hook.pytest_recording_configure(config=pytestconfig, vcr=vcr)
     return vcr.use_cassette(default_cassette, **merged_config)
